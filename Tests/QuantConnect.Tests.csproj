@@ -106,6 +106,7 @@
     <Compile Include="Algorithm\AlgorithmTradingTests.cs" />
     <Compile Include="API\ApiTests.cs" />
     <Compile Include="Brokerages\BrokerageTests.cs" />
+    <Compile Include="Brokerages\CompositeBrokerageTests.cs" />
     <Compile Include="Brokerages\Fxcm\FxcmBrokerageHistoryProviderTests.cs" />
     <Compile Include="Brokerages\Fxcm\FxcmBrokerageDataQueueHandlerTests.cs" />
     <Compile Include="Brokerages\Fxcm\FxcmBrokerageTests.cs" />

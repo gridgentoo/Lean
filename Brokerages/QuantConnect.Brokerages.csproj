@@ -168,6 +168,7 @@
     <Compile Include="Brokerage.cs" />
     <Compile Include="BrokerageException.cs" />
     <Compile Include="BrokerageFactory.cs" />
+    <Compile Include="BrokerageRouter.cs" />
     <Compile Include="Fxcm\FxcmBrokerage.cs" />
     <Compile Include="Fxcm\FxcmBrokerage.DataQueueHandler.cs" />
     <Compile Include="Fxcm\FxcmBrokerage.Messaging.cs" />
