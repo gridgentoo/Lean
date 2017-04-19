@@ -68,6 +68,7 @@ namespace QuantConnect.Brokerages.Backtesting
         /// Creates a new BacktestingBrokerage for the specified algorithm. Adds market simulation to BacktestingBrokerage;
         /// </summary>
         /// <param name="algorithm">The algorithm instance</param>
+        /// <param name="marketSimulation">Simulates market conditions, such as other trader's behaviors and impacts on the market</param>
         public BacktestingBrokerage(IAlgorithm algorithm, IBacktestingMarketSimulation marketSimulation)
             : base("Backtesting Brokerage")
         {
