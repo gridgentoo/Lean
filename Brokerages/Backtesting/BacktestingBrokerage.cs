@@ -76,6 +76,15 @@ namespace QuantConnect.Brokerages.Backtesting
             MarketSimulation = marketSimulation;
             _pending = new ConcurrentDictionary<int, Order>();
         }
+
+        /// <summary>
+        /// Gets the specifier for this brokerage instance
+        /// </summary>
+        public override BrokerageSpecifier BrokerageSpecifier
+        {
+            get { return new BrokerageSpecifier(BrokerageName.Default, "paper"); }
+        }
+
         /// <summary>
         /// Gets the connection status
         /// </summary>

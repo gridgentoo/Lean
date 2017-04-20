@@ -53,6 +53,11 @@ namespace QuantConnect.Interfaces
         /// Gets the name of the brokerage
         /// </summary>
         string Name { get; }
+        
+        /// <summary>
+        /// Gets the specifier for this brokerage instance
+        /// </summary>
+        BrokerageSpecifier BrokerageSpecifier { get; }
 
         /// <summary>
         /// Returns true if we're currently connected to the broker

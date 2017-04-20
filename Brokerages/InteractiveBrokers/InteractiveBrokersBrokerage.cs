@@ -93,6 +93,14 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
         private readonly Dictionary<Symbol, DateTimeZone> _symbolExchangeTimeZones = new Dictionary<Symbol, DateTimeZone>();
 
         /// <summary>
+        /// Gets the specifier for this brokerage instance
+        /// </summary>
+        public override BrokerageSpecifier BrokerageSpecifier
+        {
+            get { return new BrokerageSpecifier(BrokerageName.InteractiveBrokersBrokerage, _account); }
+        }
+
+        /// <summary>
         /// Returns true if we're currently connected to the broker
         /// </summary>
         public override bool IsConnected

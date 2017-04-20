@@ -44,6 +44,14 @@ namespace QuantConnect.Brokerages.Oanda
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         /// <summary>
+        /// Gets the specifier for this brokerage instance
+        /// </summary>
+        public override BrokerageSpecifier BrokerageSpecifier
+        {
+            get { return new BrokerageSpecifier(BrokerageName.OandaBrokerage, AccountId); }
+        }
+
+        /// <summary>
         /// The UTC time of the last received heartbeat message
         /// </summary>
         protected DateTime LastHeartbeatUtcTime;

@@ -71,6 +71,14 @@ namespace QuantConnect.Brokerages.Oanda
         #region IBrokerage implementation
 
         /// <summary>
+        /// Gets the specifier for this brokerage instance
+        /// </summary>
+        public override BrokerageSpecifier BrokerageSpecifier
+        {
+            get { return _api.BrokerageSpecifier; }
+        }
+
+        /// <summary>
         /// Returns true if we're currently connected to the broker
         /// </summary>
         public override bool IsConnected

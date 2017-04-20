@@ -55,6 +55,11 @@ namespace QuantConnect.Brokerages
         public string Name { get; private set; }
 
         /// <summary>
+        /// Gets the specifier for this brokerage instance
+        /// </summary>
+        public abstract BrokerageSpecifier BrokerageSpecifier { get; }
+
+        /// <summary>
         /// Returns true if we're currently connected to the broker
         /// </summary>
         public abstract bool IsConnected { get; }
