@@ -63,6 +63,5 @@ namespace QuantConnect.Packets
             };
         }
 
-    } // End Work Packet:
-
-} // End of Namespace:
+    }
+}

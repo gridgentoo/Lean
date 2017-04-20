@@ -145,6 +145,5 @@ namespace QuantConnect.Packets
         [JsonProperty(PropertyName = "sHistoryProvider")]
         public string HistoryProvider = "";
 
-    } // End Node Packet:
-
-} // End of Namespace:
+    }
+}
