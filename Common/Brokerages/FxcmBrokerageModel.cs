@@ -76,7 +76,7 @@ namespace QuantConnect.Brokerages
             // validate security type
             if (security.Type != SecurityType.Forex && security.Type != SecurityType.Cfd)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "NotSupported",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Fxcm, BrokerageMessageType.Warning, "NotSupported",
                     "This model does not support " + security.Type + " security type."
                     );
 
@@ -86,7 +86,7 @@ namespace QuantConnect.Brokerages
             // validate order type
             if (order.Type != OrderType.Limit && order.Type != OrderType.Market && order.Type != OrderType.StopMarket)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "NotSupported",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Fxcm, BrokerageMessageType.Warning, "NotSupported",
                     "This model does not support " + order.Type + " order type."
                     );
 
@@ -96,7 +96,7 @@ namespace QuantConnect.Brokerages
             // validate order quantity
             if (order.Quantity % 1000 != 0)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "NotSupported",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Fxcm, BrokerageMessageType.Warning, "NotSupported",
                     "The order quantity must be a multiple of 1000."
                     );
 
@@ -140,7 +140,7 @@ namespace QuantConnect.Brokerages
             // validate order quantity
             if (request.Quantity != null && request.Quantity % 1000 != 0)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "NotSupported",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Fxcm, BrokerageMessageType.Warning, "NotSupported",
                     "The order quantity must be a multiple of 1000."
                     );
 
@@ -201,7 +201,7 @@ namespace QuantConnect.Brokerages
 
             if (invalidPrice)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "NotSupported",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Fxcm, BrokerageMessageType.Warning, "NotSupported",
                     "Limit Buy orders and Stop Sell orders must be below market, Limit Sell orders and Stop Buy orders must be above market."
                     );
 

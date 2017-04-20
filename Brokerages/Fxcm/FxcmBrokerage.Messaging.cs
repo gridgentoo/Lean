@@ -448,7 +448,7 @@ namespace QuantConnect.Brokerages.Fxcm
                         {
                             var messageText = message.getFXCMErrorDetails().Replace("\n", "");
                             Log.Trace("FxcmBrokerage.OnExecutionReport(): " + messageText);
-                            OnMessage(new BrokerageMessageEvent(BrokerageMessageType.Warning, "OrderSubmitReject", messageText));
+                            OnMessage(new BrokerageMessageEvent(BrokerageSpecifier, BrokerageMessageType.Warning, "OrderSubmitReject", messageText));
                         }
 
                         _isOrderSubmitRejected = true;
@@ -517,7 +517,7 @@ namespace QuantConnect.Brokerages.Fxcm
             {
                 var messageText = message.getFXCMErrorDetails().Replace("\n", "");
                 Log.Trace("FxcmBrokerage.OnOrderCancelReject(): " + messageText);
-                OnMessage(new BrokerageMessageEvent(BrokerageMessageType.Warning, "OrderUpdateOrCancelReject", messageText));
+                OnMessage(new BrokerageMessageEvent(BrokerageSpecifier, BrokerageMessageType.Warning, "OrderUpdateOrCancelReject", messageText));
 
                 _isOrderUpdateOrCancelRejected = true;
 

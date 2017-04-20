@@ -703,7 +703,7 @@ namespace QuantConnect.Lean.Engine.TransactionHandlers
             {
                 // if we couldn't actually process the order, mark it as invalid and bail
                 order.Status = OrderStatus.Invalid;
-                if (message == null) message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "InvalidOrder", "BrokerageModel declared unable to submit order: " + order.Id);
+                if (message == null) message = new BrokerageMessageEvent(BrokerageSpecifier.Default, BrokerageMessageType.Warning, "InvalidOrder", "BrokerageModel declared unable to submit order: " + order.Id);
                 var response = OrderResponse.Error(request, OrderResponseErrorCode.BrokerageModelRefusedToSubmitOrder, "OrderID: " + order.Id + " " + message);
                 _algorithm.Error(response.ErrorMessage);
                 HandleOrderEvent(new OrderEvent(order, _algorithm.UtcTime, 0m, "BrokerageModel declared unable to submit order"));
@@ -765,7 +765,7 @@ namespace QuantConnect.Lean.Engine.TransactionHandlers
             {
                 // if we couldn't actually process the order, mark it as invalid and bail
                 order.Status = OrderStatus.Invalid;
-                if (message == null) message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "InvalidOrder", "BrokerageModel declared unable to update order: " + order.Id);
+                if (message == null) message = new BrokerageMessageEvent(BrokerageSpecifier.Default, BrokerageMessageType.Warning, "InvalidOrder", "BrokerageModel declared unable to update order: " + order.Id);
                 var response = OrderResponse.Error(request, OrderResponseErrorCode.BrokerageModelRefusedToUpdateOrder, "OrderID: " + order.Id + " " + message);
                 _algorithm.Error(response.ErrorMessage);
                 HandleOrderEvent(new OrderEvent(order, _algorithm.UtcTime, 0m, "BrokerageModel declared unable to update order"));

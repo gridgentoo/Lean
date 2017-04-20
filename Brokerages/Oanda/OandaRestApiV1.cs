@@ -891,7 +891,7 @@ namespace QuantConnect.Brokerages.Oanda
             }
             else
             {
-                OnMessage(new BrokerageMessageEvent(BrokerageMessageType.Warning, "UpdateFailed", "Failed to update Oanda order id: " + orderId + "."));
+                OnMessage(new BrokerageMessageEvent(BrokerageSpecifier, BrokerageMessageType.Warning, "UpdateFailed", "Failed to update Oanda order id: " + orderId + "."));
                 OnOrderEvent(new OrderEvent(ConvertOrder(order), DateTime.UtcNow, 0)
                 {
                     Status = OrderStatus.Invalid,

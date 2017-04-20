@@ -213,7 +213,7 @@ namespace QuantConnect.Brokerages.Fxcm
                             {
                                 _connectionLost = true;
 
-                                OnMessage(BrokerageMessageEvent.Disconnected("Connection with FXCM server lost. " +
+                                OnMessage(BrokerageMessageEvent.Disconnected(BrokerageSpecifier, "Connection with FXCM server lost. " +
                                                                              "This could be because of internet connectivity issues. "));
                             }
                             else if (_connectionLost && IsWithinTradingHours())
@@ -254,7 +254,7 @@ namespace QuantConnect.Brokerages.Fxcm
 
                                     _connectionLost = false;
 
-                                    OnMessage(BrokerageMessageEvent.Reconnected("Connection with FXCM server restored."));
+                                    OnMessage(BrokerageMessageEvent.Reconnected(BrokerageSpecifier, "Connection with FXCM server restored."));
                                 }
                                 catch (Exception exception)
                                 {

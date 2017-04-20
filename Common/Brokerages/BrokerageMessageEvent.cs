@@ -36,49 +36,57 @@ namespace QuantConnect.Brokerages
         public string Message { get; private set; }
 
         /// <summary>
+        /// Gets the specifier of the brokerage the raised the event
+        /// </summary>
+        public BrokerageSpecifier BrokerageSpecifier { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the BrokerageMessageEvent class
         /// </summary>
+        /// <param name="specifier">Specifies the brokerage that raised this event</param>
         /// <param name="type">The type of brokerage message</param>
         /// <param name="code">The brokerage specific code</param>
         /// <param name="message">The message text received from the brokerage</param>
-        public BrokerageMessageEvent(BrokerageMessageType type, int code, string message)
+        public BrokerageMessageEvent(BrokerageSpecifier specifier, BrokerageMessageType type, int code, string message)
+            : this(specifier, type, code.ToString(), message)
         {
-            Type = type;
-            Code = code.ToString();
-            Message = message;
         }
 
         /// <summary>
         /// Initializes a new instance of the BrokerageMessageEvent class
         /// </summary>
+        /// <param name="specifier">Specifies the brokerage that raised this event</param>
         /// <param name="type">The type of brokerage message</param>
         /// <param name="code">The brokerage specific code</param>
         /// <param name="message">The message text received from the brokerage</param>
-        public BrokerageMessageEvent(BrokerageMessageType type, string code, string message)
+        public BrokerageMessageEvent(BrokerageSpecifier specifier, BrokerageMessageType type, string code, string message)
         {
             Type = type;
             Code = code;
             Message = message;
+            BrokerageSpecifier = specifier;
         }
 
         /// <summary>
         /// Creates a new <see cref="BrokerageMessageEvent"/> to represent a disconnect message
         /// </summary>
+        /// <param name="specifier">Specifies the brokerage that raised this event</param>
         /// <param name="message">The message from the brokerage</param>
         /// <returns>A brokerage disconnect message</returns>
-        public static BrokerageMessageEvent Disconnected(string message)
+        public static BrokerageMessageEvent Disconnected(BrokerageSpecifier specifier, string message)
         {
-            return new BrokerageMessageEvent(BrokerageMessageType.Disconnect, "Disconnect", message);
+            return new BrokerageMessageEvent(specifier, BrokerageMessageType.Disconnect, "Disconnect", message);
         }
 
         /// <summary>
         /// Creates a new <see cref="BrokerageMessageEvent"/> to represent a reconnect message
         /// </summary>
+        /// <param name="specifier">Specifies the brokerage that raised this event</param>
         /// <param name="message">The message from the brokerage</param>
         /// <returns>A brokerage reconnect message</returns>
-        public static BrokerageMessageEvent Reconnected(string message)
+        public static BrokerageMessageEvent Reconnected(BrokerageSpecifier specifier, string message)
         {
-            return new BrokerageMessageEvent(BrokerageMessageType.Reconnect, "Reconnect", message);
+            return new BrokerageMessageEvent(specifier, BrokerageMessageType.Reconnect, "Reconnect", message);
         }
 
         /// <summary>

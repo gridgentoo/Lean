@@ -148,7 +148,7 @@ namespace QuantConnect.Brokerages
             var orderIsWithinForexSizeLimits = quantity < max;
             if (!orderIsWithinForexSizeLimits)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "OrderSizeLimit",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Interactive, BrokerageMessageType.Warning, "OrderSizeLimit",
                     string.Format("The maximum allowable order size is {0}{1}.", max, baseCurrency)
                     );
             }

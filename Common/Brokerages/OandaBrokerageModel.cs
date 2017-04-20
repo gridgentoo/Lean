@@ -77,7 +77,7 @@ namespace QuantConnect.Brokerages
             // validate security type
             if (security.Type != SecurityType.Forex && security.Type != SecurityType.Cfd)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "NotSupported",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Oanda, BrokerageMessageType.Warning, "NotSupported",
                     "This model does not support " + security.Type + " security type."
                     );
 
@@ -87,7 +87,7 @@ namespace QuantConnect.Brokerages
             // validate order type
             if (order.Type != OrderType.Limit && order.Type != OrderType.Market && order.Type != OrderType.StopMarket)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "NotSupported",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Oanda, BrokerageMessageType.Warning, "NotSupported",
                     "This model does not support " + order.Type + " order type."
                     );
 

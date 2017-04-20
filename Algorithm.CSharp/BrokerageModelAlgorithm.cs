@@ -107,7 +107,7 @@ namespace QuantConnect.Algorithm.Examples
                 if (cashAfterOrder < _minimumAccountBalance)
                 {
                     // return a message describing why we're not allowing this order
-                    message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "InsufficientRemainingCapital", 
+                    message = new BrokerageMessageEvent(BrokerageSpecifier.Default, BrokerageMessageType.Warning, "InsufficientRemainingCapital", 
                         string.Format("Account must maintain a minimum of ${0} USD at all times. Order ID: {1}", _minimumAccountBalance, order.Id)
                         );
                     return false;

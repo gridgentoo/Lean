@@ -171,7 +171,7 @@ namespace QuantConnect.Brokerages.Oanda
                             _connectionLost = true;
                             nextReconnectionAttemptUtcTime = DateTime.UtcNow.AddSeconds(nextReconnectionAttemptSeconds);
 
-                            OnMessage(BrokerageMessageEvent.Disconnected("Connection with Oanda server lost. " +
+                            OnMessage(BrokerageMessageEvent.Disconnected(BrokerageSpecifier, "Connection with Oanda server lost. " +
                                                                          "This could be because of internet connectivity issues. "));
                         }
                         else if (_connectionLost)
@@ -183,7 +183,7 @@ namespace QuantConnect.Brokerages.Oanda
                                     _connectionLost = false;
                                     nextReconnectionAttemptSeconds = 1;
 
-                                    OnMessage(BrokerageMessageEvent.Reconnected("Connection with Oanda server restored."));
+                                    OnMessage(BrokerageMessageEvent.Reconnected(BrokerageSpecifier, "Connection with Oanda server restored."));
                                 }
                                 else
                                 {

@@ -60,7 +60,7 @@ namespace QuantConnect.Brokerages
             var securityType = order.SecurityType;
             if (securityType != SecurityType.Equity)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "NotSupported",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Tradier, BrokerageMessageType.Warning, "NotSupported",
                     "This model only supports equities."
                     );
                 
@@ -69,7 +69,7 @@ namespace QuantConnect.Brokerages
 
             if (order.Type == OrderType.MarketOnOpen || order.Type == OrderType.MarketOnClose)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "NotSupported",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Tradier, BrokerageMessageType.Warning, "NotSupported",
                     "Tradier brokerage only supports Market orders. MarketOnOpen and MarketOnClose orders not supported."
                     );
 
@@ -78,7 +78,7 @@ namespace QuantConnect.Brokerages
 
             if (!CanExecuteOrder(security, order))
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "ExtendedMarket",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Tradier, BrokerageMessageType.Warning, "ExtendedMarket",
                     "Tradier does not support extended market hours trading.  Your order will be processed at market open."
                     );
             }
@@ -102,7 +102,7 @@ namespace QuantConnect.Brokerages
             // Tradier doesn't allow updating order quantities
             if (request.Quantity != null && request.Quantity != order.Quantity)
             {
-                message = new BrokerageMessageEvent(BrokerageMessageType.Warning, "UpdateRejected",
+                message = new BrokerageMessageEvent(BrokerageSpecifier.Tradier, BrokerageMessageType.Warning, "UpdateRejected",
                     "Traider does not support updating order quantities."
                     );
 

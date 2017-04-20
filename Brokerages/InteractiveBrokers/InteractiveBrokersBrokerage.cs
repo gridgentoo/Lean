@@ -964,7 +964,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
             {
                 // we've reconnected
                 _disconnected1100Fired = false;
-                OnMessage(BrokerageMessageEvent.Reconnected(errorMsg));
+                OnMessage(BrokerageMessageEvent.Reconnected(BrokerageSpecifier, errorMsg));
             }
             else if (errorCode == 506)
             {
@@ -987,7 +987,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
                 OnOrderEvent(orderEvent);
             }
 
-            OnMessage(new BrokerageMessageEvent(brokerageMessageType, errorCode, errorMsg));
+            OnMessage(new BrokerageMessageEvent(BrokerageSpecifier, brokerageMessageType, errorCode, errorMsg));
         }
 
         /// <summary>
@@ -1001,7 +1001,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
             if (_disconnected1100Fired && !IsWithinScheduledServerResetTimes())
             {
                 // if we were disconnected and we're nothing within the reset times, send the error event
-                OnMessage(BrokerageMessageEvent.Disconnected("Connection with Interactive Brokers lost. " +
+                OnMessage(BrokerageMessageEvent.Disconnected(BrokerageSpecifier, "Connection with Interactive Brokers lost. " +
                     "This could be because of internet connectivity issues or a log in from another location."
                     ));
             }
