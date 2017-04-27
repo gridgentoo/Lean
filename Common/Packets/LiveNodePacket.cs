@@ -31,18 +31,6 @@ namespace QuantConnect.Packets
         public string DeployId = "";
 
         /// <summary>
-        /// String name of the brokerage we're trading with
-        /// </summary>
-        [JsonProperty(PropertyName = "sBrokerage")]
-        public string Brokerage = "";
-
-        /// <summary>
-        /// String-String Dictionary of Brokerage Data for this Live Job
-        /// </summary>
-        [JsonProperty(PropertyName = "aBrokerageData")]
-        public Dictionary<string, string> BrokerageData = new Dictionary<string, string>();
-
-        /// <summary>
         /// String name of the DataQueueHandler we're running with
         /// </summary>
         [JsonProperty(PropertyName = "sDataQueueHandler")]

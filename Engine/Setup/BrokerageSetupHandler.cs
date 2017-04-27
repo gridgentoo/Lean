@@ -64,7 +64,7 @@ namespace QuantConnect.Lean.Engine.Setup
 
         // saves ref to algo so we can call quit if runtime error encountered
         private IAlgorithm _algorithm;
-        private IBrokerageFactory _factory;
+        private readonly List<IBrokerageFactory> _brokerageFactories =new List<IBrokerageFactory>();
 
         /// <summary>
         /// Initializes a new BrokerageSetupHandler
@@ -116,14 +116,14 @@ namespace QuantConnect.Lean.Engine.Setup
         /// <returns>The brokerage instance, or throws if error creating instance</returns>
         public IBrokerage CreateBrokerage(AlgorithmNodePacket algorithmNodePacket, IAlgorithm uninitializedAlgorithm, out IBrokerageFactory factory)
         {
-            var liveJob = algorithmNodePacket as LiveNodePacket;
-            if (liveJob == null)
+            foreach (var brokerageData in algorithmNodePacket.Brokerages)
             {
-                throw new ArgumentException("BrokerageSetupHandler.CreateBrokerage requires a live node packet");
+                var brokerageTypeName = brokerageData.BrokerageTypeName;
+                var factory = Composer.Instance.Single<IBrokerageFactory>(brokerageFactory => brokerageFactory.BrokerageType.MatchesTypeName(brokerageData.BrokerageTypeName));
             }
 
             // find the correct brokerage factory based on the specified brokerage in the live job packet
-            _factory = Composer.Instance.Single<IBrokerageFactory>(brokerageFactory => brokerageFactory.BrokerageType.MatchesTypeName(liveJob.Brokerage));
+            _factory = 
             factory = _factory;
 
             // initialize the correct brokerage using the resolved factory

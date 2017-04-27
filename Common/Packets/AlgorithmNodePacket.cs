@@ -145,5 +145,28 @@ namespace QuantConnect.Packets
         [JsonProperty(PropertyName = "sHistoryProvider")]
         public string HistoryProvider = "";
 
+        /// <summary>
+        /// List of brokerages to initialize with the algorithm
+        /// </summary>
+        [JsonProperty(PropertyName = "aBrokerageData")]
+        public List<BrokerageData> Brokerages = new List<BrokerageData>();
+
+        /// <summary>
+        /// Specifies a brokerage the algorithm should connect to on start
+        /// </summary>
+        public class BrokerageData
+        {
+            /// <summary>
+            /// The QC brokerage type name
+            /// </summary>
+            [JsonProperty("sBrokerage")]
+            public string BrokerageTypeName { get; set; }
+
+            /// <summary>
+            /// Name->Value pairs required to initialize the brokerage
+            /// </summary>
+            [JsonProperty("aBrokerageData")]
+            public Dictionary<string, string> Data { get; set; }
+        }
     }
 }

@@ -84,7 +84,7 @@ namespace QuantConnect.Brokerages
         /// <summary>
         /// Reads a value from the brokerage data, adding an error if the key is not found
         /// </summary>
-        protected static T Read<T>(IReadOnlyDictionary<string, string> brokerageData, string key, ICollection<string> errors) 
+        protected static T Read<T>(AlgorithmNodePacket.BrokerageData brokerageData, string key, ICollection<string> errors) 
             where T : IConvertible
         {
             string value;
