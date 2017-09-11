@@ -1,11 +1,11 @@
 ﻿/*
  * QUANTCONNECT.COM - Democratizing Finance, Empowering Individuals.
  * Lean Algorithmic Trading Engine v2.0. Copyright 2014 QuantConnect Corporation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ namespace QuantConnect.Data.Market
         /// <summary>
         /// Quantity exchanged in a trade.
         /// </summary>
-        public decimal Quantity = 0;
+        public int Quantity = 0;
 
         /// <summary>
         /// Exchange we are executing on. String short code expanded in the MarketCodes.US global dictionary
@@ -115,7 +115,7 @@ namespace QuantConnect.Data.Market
         /// Cloner constructor for fill forward engine implementation. Clone the original tick into this new tick:
         /// </summary>
         /// <param name="original">Original tick we're cloning</param>
-        public Tick(Tick original) 
+        public Tick(Tick original)
         {
             Symbol = original.Symbol;
             Time = new DateTime(original.Time.Ticks);
@@ -152,7 +152,7 @@ namespace QuantConnect.Data.Market
         }
 
         /// <summary>
-        /// Initializer for a last-trade equity tick with bid or ask prices. 
+        /// Initializer for a last-trade equity tick with bid or ask prices.
         /// </summary>
         /// <param name="time">Full date and time</param>
         /// <param name="symbol">Underlying equity security symbol</param>
@@ -201,7 +201,7 @@ namespace QuantConnect.Data.Market
             Time = baseDate.Date.AddMilliseconds(csv[0].ToInt32());
             Value = csv[1].ToDecimal() / GetScaleFactor(symbol.SecurityType);
             TickType = TickType.Trade;
-            Quantity = csv[2].ToDecimal();
+            Quantity = csv[2].ToInt32();
             Exchange = csv[3].Trim();
             SaleCondition = csv[4];
             Suspicious = csv[5].ToInt32() == 1;
@@ -231,7 +231,7 @@ namespace QuantConnect.Data.Market
                         Time = date.Date.AddMilliseconds(csv[0].ToInt64()).ConvertTo(config.DataTimeZone, config.ExchangeTimeZone);
                         Value = config.GetNormalizedPrice(csv[1].ToDecimal() / scaleFactor);
                         TickType = TickType.Trade;
-                        Quantity = csv[2].ToDecimal();
+                        Quantity = csv[2].ToInt32();
                         if (csv.Count > 3)
                         {
                             Exchange = csv[3];
@@ -266,7 +266,7 @@ namespace QuantConnect.Data.Market
                         if (TickType == TickType.Trade)
                         {
                             Value = config.GetNormalizedPrice(csv[1].ToDecimal()/scaleFactor);
-                            Quantity = csv[2].ToDecimal();
+                            Quantity = csv[2].ToInt32();
                             Exchange = csv[3];
                             SaleCondition = csv[4];
                             Suspicious = csv[5] == "1";
@@ -332,7 +332,7 @@ namespace QuantConnect.Data.Market
                 // currently ticks don't come through the reader function
                 return new Tick();
             }
-            
+
             return new Tick(config, line, date);
         }
 
@@ -376,7 +376,7 @@ namespace QuantConnect.Data.Market
             AskPrice = askPrice;
             BidSize = bidSize;
             AskSize = askSize;
-            Quantity = Convert.ToDecimal(volume);
+            Quantity = Convert.ToInt32(volume);
         }
 
         /// <summary>
