@@ -247,6 +247,9 @@ namespace QuantConnect.Algorithm
         /// <returns>An enumerable of slice containing the requested historical data</returns>
         public IEnumerable<TradeBar> History(Symbol symbol, int periods, Resolution? resolution = null)
         {
+            if (symbol == QuantConnect.Symbol.Empty) throw new ArgumentException("Could not create history for the given ticker. " +
+                                                                                 "Either explicitly use a symbol object to make the history request " +
+                                                                                 "or ensure the symbol has been added using the AddSecurity() method.");
             var security = Securities[symbol];
             var start = GetStartTimeAlgoTz(symbol, periods, resolution);
 
@@ -272,6 +275,10 @@ namespace QuantConnect.Algorithm
             where T : IBaseData
         {
             if (resolution == Resolution.Tick) throw new ArgumentException("History functions that accept a 'periods' parameter can not be used with Resolution.Tick");
+            if (symbol == QuantConnect.Symbol.Empty) throw new ArgumentException("Could not create history for the given ticker. " +
+                                                                                 "Either explicitly use a symbol object to make the history request " +
+                                                                                 "or ensure the symbol has been added using the AddSecurity() method.");
+
             var security = Securities[symbol];
             // verify the types match
             var requestedType = typeof(T);
@@ -297,6 +304,9 @@ namespace QuantConnect.Algorithm
         public IEnumerable<T> History<T>(Symbol symbol, DateTime start, DateTime end, Resolution? resolution = null)
             where T : IBaseData
         {
+            if (symbol == QuantConnect.Symbol.Empty) throw new ArgumentException("Could not create history for the given ticker. " +
+                                                                                 "Either explicitly use a symbol object to make the history request " +
+                                                                                 "or ensure the symbol has been added using the AddSecurity() method.");
             var security = Securities[symbol];
             // verify the types match
             var requestedType = typeof(T);
