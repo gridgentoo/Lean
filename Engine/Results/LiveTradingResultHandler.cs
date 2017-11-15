@@ -464,7 +464,7 @@ namespace QuantConnect.Lean.Engine.Results
                     chart.Series = deltaChart.Series;
                 }
 
-                if (current.Count >= groupSize)
+                if (current.Count >= groupSize && _subscription != "*")
                 {
                     // Add the micro packet to transport.
                     chartPackets.Add(new LiveResultPacket(_job, new LiveResult { Charts = current }));
@@ -474,7 +474,7 @@ namespace QuantConnect.Lean.Engine.Results
             }
 
             //Add whatever is left over here too.
-            if (current.Count > 0)
+            if (current.Count > 0 && _subscription != "*")
             {
                 chartPackets.Add(new LiveResultPacket(_job, new LiveResult { Charts = current }));
             }
