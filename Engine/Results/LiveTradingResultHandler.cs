@@ -459,7 +459,7 @@ namespace QuantConnect.Lean.Engine.Results
                 var chart = new Chart(deltaChart.Name);
                 current.Add(deltaChart.Name, chart);
 
-                if (deltaChart.Name == _subscription || _subscription == "*")
+                if (deltaChart.Name == _subscription || (_subscription == "*" && deltaChart.Name == "Strategy Equity"))
                 {
                     chart.Series = deltaChart.Series;
                 }
