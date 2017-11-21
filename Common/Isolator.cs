@@ -1,11 +1,11 @@
 ﻿/*
  * QUANTCONNECT.COM - Democratizing Finance, Empowering Individuals.
  * Lean Algorithmic Trading Engine v2.0. Copyright 2014 QuantConnect Corporation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,14 +14,14 @@
 */
 
 using System;
+using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 using QuantConnect.Logging;
 
-namespace QuantConnect 
+namespace QuantConnect
 {
     /// <summary>
-    /// Isolator class - create a new instance of the algorithm and ensure it doesn't 
+    /// Isolator class - create a new instance of the algorithm and ensure it doesn't
     /// exceed memory or time execution limits.
     /// </summary>
     public class Isolator
@@ -29,26 +29,17 @@ namespace QuantConnect
         /// <summary>
         /// Algo cancellation controls - cancel source.
         /// </summary>
-        public CancellationTokenSource CancellationTokenSource
-        {
-            get; private set;
-        }
+        public CancellationTokenSource CancellationTokenSource { get; }
 
         /// <summary>
         /// Algo cancellation controls - cancellation token for algorithm thread.
         /// </summary>
-        public CancellationToken CancellationToken
-        {
-            get { return CancellationTokenSource.Token; }
-        }
+        public CancellationToken CancellationToken => CancellationTokenSource.Token;
 
         /// <summary>
         /// Check if this task isolator is cancelled, and exit the analysis
         /// </summary>
-        public bool IsCancellationRequested
-        {
-            get { return CancellationTokenSource.IsCancellationRequested; }
-        }
+        public bool IsCancellationRequested => CancellationTokenSource.IsCancellationRequested;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Isolator"/> class
@@ -80,18 +71,19 @@ namespace QuantConnect
 
             //Convert to bytes
             memoryCap *= 1024 * 1024;
-            var spikeLimit = memoryCap*2;
+            var spikeLimit = memoryCap * 2;
 
             //Launch task
-            var task = Task.Factory.StartNew(codeBlock, CancellationTokenSource.Token);
+            var thread = new Thread(() => codeBlock()) { IsBackground = true };
+            thread.Start();
 
-            while (!task.IsCompleted && DateTime.Now < end)
+            while (thread.IsAlive && DateTime.Now < end)
             {
                 // if over 80% allocation force GC then sample
                 var sample = Convert.ToDouble(GC.GetTotalMemory(memoryUsed > memoryCap * 0.8));
 
                 // find the EMA of the memory used to prevent spikes killing stategy
-                memoryUsed = Convert.ToInt64((emaPeriod-1)/emaPeriod * memoryUsed + (1/emaPeriod)*sample);
+                memoryUsed = Convert.ToInt64((emaPeriod - 1) / emaPeriod * memoryUsed + 1 / emaPeriod * sample);
 
                 // if the rolling EMA > cap; or the spike is more than 2x the allocation.
                 if (memoryUsed > memoryCap || sample > spikeLimit)
@@ -114,14 +106,15 @@ namespace QuantConnect
                 var possibleMessage = withinCustomLimits();
                 if (!string.IsNullOrEmpty(possibleMessage))
                 {
-                    message = possibleMessage;
+                    var stackTrace = GetStackTrace(thread);
+                    message = $"{possibleMessage} - StackTrace: {stackTrace}";
                     break;
                 }
 
                 Thread.Sleep(1000);
             }
 
-            if (task.IsCompleted == false && message == "")
+            if (thread.IsAlive && message == "")
             {
                 message = "Execution Security Error: Operation timed out - " + timeSpan.TotalMinutes + " minutes max. Check for recursive loops.";
                 Log.Trace("Isolator.ExecuteWithTimeLimit(): " + message);
@@ -133,7 +126,8 @@ namespace QuantConnect
                 Log.Error("Security.ExecuteWithTimeLimit(): " + message);
                 throw new Exception(message);
             }
-            return task.IsCompleted;
+
+            return !thread.IsAlive;
         }
 
         /// <summary>
@@ -155,7 +149,80 @@ namespace QuantConnect
         /// <returns></returns>
         private static double PrettyFormatRam(long ramInBytes)
         {
-            return Math.Round(Convert.ToDouble(ramInBytes/(1024*1024)));
+            return Math.Round(Convert.ToDouble(ramInBytes / (1024 * 1024)));
+        }
+
+        /// <summary>
+        /// Returns the current stack trace for a given thread
+        /// </summary>
+        /// <param name="targetThread">The thread for which we need the stack trace</param>
+        /// <remarks>
+        /// source from: https://stackoverflow.com/a/14935378
+        /// </remarks>
+        private static StackTrace GetStackTrace(Thread targetThread)
+        {
+            using (ManualResetEvent fallbackThreadReady = new ManualResetEvent(false), exitedSafely = new ManualResetEvent(false))
+            {
+                var fallbackThread = new Thread(() =>
+                {
+                    fallbackThreadReady.Set();
+                    while (!exitedSafely.WaitOne(200))
+                    {
+                        try
+                        {
+#pragma warning disable 618
+                            targetThread.Resume();
+#pragma warning restore 618
+                        }
+                        catch (Exception)
+                        {
+                            // Whatever happens, do never stop to resume the target-thread regularly until the main-thread has exited safely.
+                        }
+                    }
+                }) {Name = "GetStackFallbackThread"};
+                try
+                {
+                    fallbackThread.Start();
+                    fallbackThreadReady.WaitOne();
+                    // From here, you have about 200ms to get the stack-trace.
+#pragma warning disable 618
+                    targetThread.Suspend();
+#pragma warning restore 618
+                    StackTrace trace = null;
+                    try
+                    {
+#pragma warning disable 618
+                        trace = new StackTrace(targetThread, true);
+#pragma warning restore 618
+                    }
+                    catch (ThreadStateException)
+                    {
+                        //failed to get stack trace, since the fallback-thread resumed the thread
+                        //possible reasons:
+                        //1.) This thread was just too slow (not very likely)
+                        //2.) The deadlock ocurred and the fallbackThread rescued the situation.
+                        //In both cases just return null.
+                    }
+                    try
+                    {
+#pragma warning disable 618
+                        targetThread.Resume();
+#pragma warning restore 618
+                    }
+                    catch (ThreadStateException)
+                    {
+                        // Thread is running again already
+                    }
+                    return trace;
+                }
+                finally
+                {
+                    // Just signal the backup-thread to stop.
+                    exitedSafely.Set();
+                    // Join the thread to avoid disposing "exited safely" too early. And also make sure that no leftover threads are cluttering iis by accident.
+                    fallbackThread.Join();
+                }
+            }
         }
     }
 }
