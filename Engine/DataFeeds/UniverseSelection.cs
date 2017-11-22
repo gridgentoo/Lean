@@ -189,7 +189,14 @@ namespace QuantConnect.Lean.Engine.DataFeeds
                 foreach (var request in universe.GetSubscriptionRequests(security, dateTimeUtc, algorithmEndDateUtc))
                 {
                     // add the new subscriptions to the data feed
-                    _dataFeed.AddSubscription(request);
+                    if (_dataFeed.AddSubscription(request))
+                    {
+                        _algorithm.SubscriptionManager.Subscriptions.Add(request.Configuration);
+                        if (!security.AddData(request.Configuration))
+                        {
+                            Log.Error($"UniverseSelection.RemoveSecurityFromUniverse(): security.AddData({request.Configuration}) returned false!");
+                        }
+                    }
 
                     // only update our security changes if we actually added data
                     if (!request.IsUniverseSubscription)
@@ -250,7 +257,14 @@ namespace QuantConnect.Lean.Engine.DataFeeds
                 }
                 else
                 {
-                    _dataFeed.RemoveSubscription(subscription.Configuration);
+                    if (_dataFeed.RemoveSubscription(subscription.Configuration))
+                    {
+                        _algorithm.SubscriptionManager.Subscriptions.Remove(subscription.Configuration);
+                        if (!member.RemoveData(subscription.Configuration))
+                        {
+                            Log.Error($"UniverseSelection.RemoveSecurityFromUniverse(): security.RemoveData({subscription.Configuration}) returned false!");
+                        }
+                    }
                 }
             }
 
