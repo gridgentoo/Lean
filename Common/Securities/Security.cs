@@ -1,11 +1,11 @@
 ﻿/*
  * QUANTCONNECT.COM - Democratizing Finance, Empowering Individuals.
  * Lean Algorithmic Trading Engine v2.0. Copyright 2014 QuantConnect Corporation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,10 +34,10 @@ namespace QuantConnect.Securities
     /// A base vehicle properties class for providing a common interface to all assets in QuantConnect.
     /// </summary>
     /// <remarks>
-    /// Security object is intended to hold properties of the specific security asset. These properties can include trade start-stop dates, 
+    /// Security object is intended to hold properties of the specific security asset. These properties can include trade start-stop dates,
     /// price, market hours, resolution of the security, the holdings information for this security and the specific fill model.
     /// </remarks>
-    public class Security 
+    public class Security
     {
         private readonly Symbol _symbol;
         private LocalTimeKeeper _localTimeKeeper;
@@ -82,7 +82,7 @@ namespace QuantConnect.Securities
         /// <remarks>
         /// QuantConnect currently only supports Equities and Forex
         /// </remarks>
-        public SecurityType Type 
+        public SecurityType Type
         {
             get { return _symbol.ID.SecurityType; }
         }
@@ -91,7 +91,7 @@ namespace QuantConnect.Securities
         /// Resolution of data requested for this security.
         /// </summary>
         /// <remarks>Tick, second or minute resolution for QuantConnect assets.</remarks>
-        public Resolution Resolution 
+        public Resolution Resolution
         {
             get { return SubscriptionsBag.Select(x => x.Resolution).DefaultIfEmpty(Resolution.Daily).Min(); }
         }
@@ -99,7 +99,7 @@ namespace QuantConnect.Securities
         /// <summary>
         /// Indicates the data will use previous bars when there was no trading in this time period. This was a configurable datastream setting set in initialization.
         /// </summary>
-        public bool IsFillDataForward 
+        public bool IsFillDataForward
         {
             get { return SubscriptionsBag.Any(x => x.FillDataForward); }
         }
@@ -136,7 +136,7 @@ namespace QuantConnect.Securities
         {
             get
             {
-                return GetLastData() != null; 
+                return GetLastData() != null;
             }
         }
 
@@ -165,7 +165,7 @@ namespace QuantConnect.Securities
         /// <seealso cref="ForexHolding"/>
         public SecurityHolding Holdings
         {
-            get; 
+            get;
             set;
         }
 
@@ -207,7 +207,7 @@ namespace QuantConnect.Securities
             get
             {
                 // check if the FillModel/FeeModel/Slippage models are all the same reference
-                if (FillModel is ISecurityTransactionModel 
+                if (FillModel is ISecurityTransactionModel
                  && ReferenceEquals(FillModel, FeeModel)
                  && ReferenceEquals(FeeModel, SlippageModel))
                 {
@@ -273,7 +273,7 @@ namespace QuantConnect.Securities
         /// </summary>
         public ISettlementModel SettlementModel
         {
-            get; 
+            get;
             set;
         }
 
@@ -287,7 +287,7 @@ namespace QuantConnect.Securities
         }
 
         /// <summary>
-        /// Customizable data filter to filter outlier ticks before they are passed into user event handlers. 
+        /// Customizable data filter to filter outlier ticks before they are passed into user event handlers.
         /// By default all ticks are passed into the user algorithms.
         /// </summary>
         /// <remarks>TradeBars (seconds and minute bars) are prefiltered to ensure the ticks which build the bars are realistically tradeable</remarks>
@@ -295,7 +295,7 @@ namespace QuantConnect.Securities
         /// <seealso cref="ForexDataFilter"/>
         public ISecurityDataFilter DataFilter
         {
-            get; 
+            get;
             set;
         }
 
@@ -445,7 +445,7 @@ namespace QuantConnect.Securities
         /// <summary>
         /// Read only property that checks if we currently own stock in the company.
         /// </summary>
-        public virtual bool HoldStock 
+        public virtual bool HoldStock
         {
             get
             {
@@ -457,7 +457,7 @@ namespace QuantConnect.Securities
         /// <summary>
         /// Alias for HoldStock - Do we have any of this security
         /// </summary>
-        public virtual bool Invested 
+        public virtual bool Invested
         {
             get
             {
@@ -466,7 +466,7 @@ namespace QuantConnect.Securities
         }
 
         /// <summary>
-        /// Local time for this market 
+        /// Local time for this market
         /// </summary>
         public virtual DateTime LocalTime
         {
@@ -483,7 +483,7 @@ namespace QuantConnect.Securities
         /// <summary>
         /// Get the current value of the security.
         /// </summary>
-        public virtual decimal Price 
+        public virtual decimal Price
         {
             get { return Cache.Price; }
         }
@@ -518,7 +518,7 @@ namespace QuantConnect.Securities
         /// <summary>
         /// If this uses tradebar data, return the most recent close.
         /// </summary>
-        public virtual decimal Close 
+        public virtual decimal Close
         {
             get { return Cache.Close == 0 ? Price : Cache.Close; }
         }
@@ -583,7 +583,7 @@ namespace QuantConnect.Securities
         /// Get the last price update set to the security.
         /// </summary>
         /// <returns>BaseData object for this security</returns>
-        public BaseData GetLastData() 
+        public BaseData GetLastData()
         {
             return Cache.GetData();
         }
@@ -609,8 +609,8 @@ namespace QuantConnect.Securities
         /// Update any security properties based on the latest market data and time
         /// </summary>
         /// <param name="data">New data packet from LEAN</param>
-        /// 
-        public void SetMarketPrice(BaseData data) 
+        ///
+        public void SetMarketPrice(BaseData data)
         {
             //Add new point to cache:
             if (data == null) return;
@@ -753,7 +753,7 @@ namespace QuantConnect.Securities
         /// Adds the specified data subscriptions to this security.
         /// </summary>
         /// <param name="subscriptions">The subscription configuration to add. The Symbol and ExchangeTimeZone properties must match the existing Security object</param>
-        internal void AddData(SubscriptionDataConfigList subscriptions)
+        internal void AddData(SubscriptionDataConfigCollection subscriptions)
         {
             foreach (var subscription in subscriptions)
             {

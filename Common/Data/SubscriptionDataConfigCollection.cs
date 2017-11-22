@@ -24,7 +24,7 @@ namespace QuantConnect.Data
     /// <summary>
     /// Provides convenient methods for holding a unique set of <see cref="SubscriptionDataConfig"/>
     /// </summary>
-    public class SubscriptionDataConfigList : IEnumerable<SubscriptionDataConfig>
+    public class SubscriptionDataConfigCollection : IEnumerable<SubscriptionDataConfig>
     {
         private readonly ConcurrentDictionary<SubscriptionDataConfig, SubscriptionDataConfig> _configs
             = new ConcurrentDictionary<SubscriptionDataConfig, SubscriptionDataConfig>();
@@ -46,7 +46,7 @@ namespace QuantConnect.Data
         /// Default constructor that specifies the <see cref="Symbol"/> that the <see cref="SubscriptionDataConfig"/> represent
         /// </summary>
         /// <param name="symbol"></param>
-        public SubscriptionDataConfigList(Symbol symbol)
+        public SubscriptionDataConfigCollection(Symbol symbol)
         {
             Symbol = symbol;
         }
