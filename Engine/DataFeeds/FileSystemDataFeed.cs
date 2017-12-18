@@ -83,6 +83,8 @@ namespace QuantConnect.Lean.Engine.DataFeeds
 
             IsActive = true;
             var threadCount = Math.Max(1, Math.Min(4, Environment.ProcessorCount - 3));
+            Log.Trace($"FileSystemDataFeed.Initialize(): ParallelRunnerController threads: {threadCount}, Environment.ProcessorCount: {Environment.ProcessorCount}");
+
             _controller = new ParallelRunnerController(threadCount);
             _controller.Start(_cancellationTokenSource.Token);
 
