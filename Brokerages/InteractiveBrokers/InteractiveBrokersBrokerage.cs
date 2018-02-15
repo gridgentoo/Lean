@@ -65,7 +65,6 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
         private readonly string _agentDescription;
 
         private Thread _messageProcessingThread;
-        private readonly InteractiveBrokersRestartManager _restartManager;
 
         // Notifies the thread reading information from Gateway/TWS whenever there are messages ready to be consumed
         private readonly EReaderSignal _signal = new EReaderMonitorSignal();
@@ -128,6 +127,11 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
         /// Returns true if the connected user is a financial advisor
         /// </summary>
         public bool IsFinancialAdvisor => _account.Contains("F");
+
+        /// <summary>
+        /// Gets the IB restart manager instance
+        /// </summary>
+        public InteractiveBrokersRestartManager RestartManager { get; }
 
         /// <summary>
         /// Creates a new InteractiveBrokersBrokerage using values from configuration:
@@ -223,7 +227,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
                 Log.Trace("InteractiveBrokersBrokerage.HandleNextValidID(): " + e.OrderId);
             };
 
-            _restartManager = new InteractiveBrokersRestartManager(this);
+            RestartManager = new InteractiveBrokersRestartManager(this);
         }
 
         /// <summary>
@@ -717,7 +721,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
             }
 
             _messagingRateLimiter.Dispose();
-            _restartManager.Dispose();
+            RestartManager.Dispose();
         }
 
         /// <summary>
@@ -1154,7 +1158,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
                 // so we execute the following sequence:
                 // disconnect, kill IB Gateway, restart IB Gateway, reconnect, restore data subscriptions
                 Log.Trace("InteractiveBrokersBrokerage.HandleError(): Reconnect message received. Restarting...");
-                _restartManager.Restart();
+                RestartManager.Restart();
 
                 return;
             }
@@ -1258,7 +1262,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
                 {
                     // reset time finished and we're still disconnected, restart IB client
                     Log.Trace("InteractiveBrokersBrokerage.TryWaitForReconnect(): Reset time finished and still disconnected. Restarting...");
-                    _restartManager.Restart();
+                    RestartManager.Restart();
                 }
                 else
                 {
@@ -2776,7 +2780,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
             if (!InteractiveBrokersGatewayRunner.IsRunning())
             {
                 Log.Trace("InteractiveBrokersBrokerage.CheckIbGateway(): IB Gateway not running. Restarting...");
-                _restartManager.Restart();
+                RestartManager.Restart();
             }
             Log.Trace("InteractiveBrokersBrokerage.CheckIbGateway(): end");
         }

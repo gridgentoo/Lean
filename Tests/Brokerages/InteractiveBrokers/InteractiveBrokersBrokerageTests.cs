@@ -150,9 +150,10 @@ namespace QuantConnect.Tests.Brokerages.InteractiveBrokers
             var ib = _interactiveBrokersBrokerage;
             Assert.IsTrue(ib.IsConnected);
 
-            ib.ResetGatewayConnection();
+            ib.RestartManager.Restart();
             Assert.IsTrue(InteractiveBrokersGatewayRunner.IsRunning());
             Assert.IsTrue(ib.IsConnected);
+            Assert.IsTrue(ib.RestartManager.WasLastRestartSuccessful);
 
             ib.CheckIbGateway();
             Assert.IsTrue(ib.IsConnected);
@@ -183,8 +184,9 @@ namespace QuantConnect.Tests.Brokerages.InteractiveBrokers
             const int iterations = 2;
             for (var i = 0; i < iterations; i++)
             {
-                ib.ResetGatewayConnection();
+                ib.RestartManager.Restart();
                 Assert.IsTrue(ib.IsConnected);
+                Assert.IsTrue(ib.RestartManager.WasLastRestartSuccessful);
             }
         }
 

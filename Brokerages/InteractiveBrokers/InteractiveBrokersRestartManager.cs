@@ -26,8 +26,15 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
     public class InteractiveBrokersRestartManager : IDisposable
     {
         private readonly InteractiveBrokersBrokerage _brokerage;
-        private readonly AutoResetEvent _resetEventRestartGateway = new AutoResetEvent(false);
         private readonly CancellationTokenSource _ctsRestartGateway = new CancellationTokenSource();
+        private readonly AutoResetEvent _resetEventRestartGateway = new AutoResetEvent(false);
+        private readonly AutoResetEvent _resetEventRestartGatewayComplete = new AutoResetEvent(false);
+        private Exception _lastRestartError;
+
+        /// <summary>
+        /// Returns true if the restart was completed with no errors, false otherwise
+        /// </summary>
+        public bool WasLastRestartSuccessful => _lastRestartError == null;
 
         /// <summary>
         /// Creates a new instance of the <see cref="InteractiveBrokersRestartManager"/> class
@@ -56,14 +63,22 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
 
                         try
                         {
+                            _lastRestartError = null;
+
+                            // start the restart sequence
                             _brokerage.ResetGatewayConnection();
                         }
                         catch (Exception exception)
                         {
                             Log.Error($"InteractiveBrokersRestartManager.RestartHandler(): Error in ResetGatewayConnection: {exception}");
+
+                            _lastRestartError = exception;
                         }
 
                         Log.Trace("InteractiveBrokersRestartManager.RestartHandler(): Restart sequence end.");
+
+                        // send restart complete signal to caller, allowing caller to proceed
+                        _resetEventRestartGatewayComplete.Set();
                     }
                 }
 
@@ -80,7 +95,15 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
         /// </summary>
         public void Restart()
         {
+            Log.Trace("InteractiveBrokersRestartManager.Restart(): Signaling restart.");
+
+            // send restart signal to restart handler thread
             _resetEventRestartGateway.Set();
+
+            // wait until restart complete
+            _resetEventRestartGatewayComplete.WaitOne();
+
+            Log.Trace($"InteractiveBrokersRestartManager.Restart(): Restart complete, success: {WasLastRestartSuccessful}");
         }
 
         /// <summary>
