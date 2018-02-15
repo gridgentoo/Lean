@@ -104,6 +104,14 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
             _resetEventRestartGatewayComplete.WaitOne();
 
             Log.Trace($"InteractiveBrokersRestartManager.Restart(): Restart complete, success: {WasLastRestartSuccessful}");
+
+            if (!WasLastRestartSuccessful)
+            {
+                // Occasionally happens overnight or during weekends, all 5 connection attempts fail after the restart,
+                // for now better throw an exception vs. remaining in a disconnected state.
+                // A future update could perhaps attempt a new restart at a later time (or date if during weekend).
+                throw new Exception("InteractiveBrokersRestartManager.Restart(): Failed to connect after restart.", _lastRestartError);
+            }
         }
 
         /// <summary>
