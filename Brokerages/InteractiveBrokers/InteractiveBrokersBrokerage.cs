@@ -65,8 +65,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
         private readonly string _agentDescription;
 
         private Thread _messageProcessingThread;
-        private readonly AutoResetEvent _resetEventRestartGateway = new AutoResetEvent(false);
-        private readonly CancellationTokenSource _ctsRestartGateway = new CancellationTokenSource();
+        private readonly InteractiveBrokersRestartManager _restartManager;
 
         // Notifies the thread reading information from Gateway/TWS whenever there are messages ready to be consumed
         private readonly EReaderSignal _signal = new EReaderMonitorSignal();
@@ -224,39 +223,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
                 Log.Trace("InteractiveBrokersBrokerage.HandleNextValidID(): " + e.OrderId);
             };
 
-            // handle requests to restart the IB gateway
-            new Thread(() =>
-            {
-                try
-                {
-                    Log.Trace("InteractiveBrokersBrokerage.ResetHandler(): thread started.");
-
-                    while (!_ctsRestartGateway.IsCancellationRequested)
-                    {
-                        if (_resetEventRestartGateway.WaitOne(1000, _ctsRestartGateway.Token))
-                        {
-                            Log.Trace("InteractiveBrokersBrokerage.ResetHandler(): Reset sequence start.");
-
-                            try
-                            {
-                                ResetGatewayConnection();
-                            }
-                            catch (Exception exception)
-                            {
-                                Log.Error("InteractiveBrokersBrokerage.ResetHandler(): Error in ResetGatewayConnection: " + exception);
-                            }
-
-                            Log.Trace("InteractiveBrokersBrokerage.ResetHandler(): Reset sequence end.");
-                        }
-                    }
-
-                    Log.Trace("InteractiveBrokersBrokerage.ResetHandler(): thread ended.");
-                }
-                catch (Exception exception)
-                {
-                    Log.Error("InteractiveBrokersBrokerage.ResetHandler(): Error in reset handler thread: " + exception);
-                }
-            }) { IsBackground = true }.Start();
+            _restartManager = new InteractiveBrokersRestartManager(this);
         }
 
         /// <summary>
@@ -750,8 +717,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
             }
 
             _messagingRateLimiter.Dispose();
-
-            _ctsRestartGateway.Cancel(false);
+            _restartManager.Dispose();
         }
 
         /// <summary>
@@ -1188,8 +1154,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
                 // so we execute the following sequence:
                 // disconnect, kill IB Gateway, restart IB Gateway, reconnect, restore data subscriptions
                 Log.Trace("InteractiveBrokersBrokerage.HandleError(): Reconnect message received. Restarting...");
-
-                _resetEventRestartGateway.Set();
+                _restartManager.Restart();
 
                 return;
             }
@@ -1293,8 +1258,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
                 {
                     // reset time finished and we're still disconnected, restart IB client
                     Log.Trace("InteractiveBrokersBrokerage.TryWaitForReconnect(): Reset time finished and still disconnected. Restarting...");
-
-                    _resetEventRestartGateway.Set();
+                    _restartManager.Restart();
                 }
                 else
                 {
@@ -2812,7 +2776,7 @@ namespace QuantConnect.Brokerages.InteractiveBrokers
             if (!InteractiveBrokersGatewayRunner.IsRunning())
             {
                 Log.Trace("InteractiveBrokersBrokerage.CheckIbGateway(): IB Gateway not running. Restarting...");
-                _resetEventRestartGateway.Set();
+                _restartManager.Restart();
             }
             Log.Trace("InteractiveBrokersBrokerage.CheckIbGateway(): end");
         }
