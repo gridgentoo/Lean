@@ -14,6 +14,7 @@
  *
 */
 
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -35,6 +36,18 @@ namespace QuantConnect.Packets
         /// </summary>
         [JsonProperty(PropertyName = "sChannel")]
         public string Channel = "";
+
+        /// <summary>
+        /// Value set by producer when sending a message
+        /// </summary>
+        [JsonProperty(PropertyName = "iRequestTimeUnixMilliseconds")]
+        public long RequestTimeUnixMilliseconds = 0;
+
+        /// <summary>
+        /// Converts the unix milliseconds request time to a date time object
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetRequestSentTime() => Time.UnixMillisecondTimeStampToDateTime(RequestTimeUnixMilliseconds);
 
         /// <summary>
         /// Initialize the base class and setup the packet type.

@@ -182,6 +182,25 @@ namespace QuantConnect
         }
 
         /// <summary>
+        /// Convert a Datetime to Unix Milliseconds Timestamp
+        /// </summary>
+        /// <param name="time">C# datetime object</param>
+        /// <returns>Double Unix milliseconds timestamp</returns>
+        public static double ToUnixMillisecondTimeStamp(this DateTime time)
+        {
+            double timestamp = 0;
+            try
+            {
+                timestamp = (time - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalMilliseconds;
+            }
+            catch (Exception err)
+            {
+                Log.Error(err, time.ToString("o"));
+            }
+            return timestamp;
+        }
+
+        /// <summary>
         /// Get the current time as a unix timestamp
         /// </summary>
         /// <returns>Double value of the unix as UTC timestamp</returns>
