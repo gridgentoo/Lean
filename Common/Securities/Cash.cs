@@ -80,10 +80,11 @@ namespace QuantConnect.Securities
         /// <param name="conversionRate">The initial conversion rate of this currency into the <see cref="CashBook.AccountCurrency"/></param>
         public Cash(string symbol, decimal amount, decimal conversionRate)
         {
-            if (symbol == null || symbol.Length < 3 || symbol.Length > 4)
+            if (symbol == null || symbol.Length < 3 || symbol.Length > Currencies.MaxCharactersPerCurrencyCode)
             {
-                throw new ArgumentException("Cash symbols must have atleast 3 characters and at most 4 characters.");
+                throw new ArgumentException($"Cash symbols must have atleast 3 characters and at most {Currencies.MaxCharactersPerCurrencyCode} characters.");
             }
+
             Amount = amount;
             ConversionRate = conversionRate;
             Symbol = symbol.ToUpper();
@@ -101,7 +102,7 @@ namespace QuantConnect.Securities
             var rate = data.Value;
             if (_invertRealTimePrice)
             {
-                rate = 1/rate;
+                rate = 1 / rate;
             }
             ConversionRate = rate;
         }
@@ -191,7 +192,7 @@ namespace QuantConnect.Securities
                 }
             }
             // if we've made it here we didn't find a security, so we'll need to add one
-
+            
             // Create a SecurityType to Market mapping with the markets from SecurityManager members
             var markets = securities.Select(x => x.Key).GroupBy(x => x.SecurityType).ToDictionary(x => x.Key, y => y.First().ID.Market);
             if (markets.ContainsKey(SecurityType.Cfd) && !markets.ContainsKey(SecurityType.Forex))
@@ -253,7 +254,7 @@ namespace QuantConnect.Securities
                 }
             }
 
-            // if this still hasn't been set then it's an error condition
+            // if we got to this point, it means no security was found and returned 
             throw new ArgumentException(string.Format("In order to maintain cash in {0} you are required to add a subscription for Forex pair {0}{1} or {1}{0}", Symbol, CashBook.AccountCurrency));
         }
 
