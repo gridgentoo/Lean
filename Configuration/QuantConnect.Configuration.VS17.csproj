@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <LangVersion>6</LangVersion>
+    <RootNamespace>QuantConnect.Configuration</RootNamespace>
+    <AssemblyName>QuantConnect.Configuration</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Common\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Logging\QuantConnect.Logging.VS17.csproj" />
+  </ItemGroup>
+</Project>

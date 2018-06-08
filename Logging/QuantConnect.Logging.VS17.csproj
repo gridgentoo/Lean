@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <LangVersion>6</LangVersion>
+    <RootNamespace>QuantConnect.Logging</RootNamespace>
+    <AssemblyName>QuantConnect.Logging</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.4.11" />
+    <Reference Include="System.ComponentModel.Composition" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Common\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
