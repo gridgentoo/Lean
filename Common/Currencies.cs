@@ -24,13 +24,28 @@ namespace QuantConnect
     public static class Currencies
     {
         /// <summary>
+        /// Maximum chars currency code can contain.
+        /// If you modify this, MaxCharactersPerCurrencyPair gets modified too.
+        /// If you modify this, you must modify const with same name in CashTests.cs!
+        /// </summary>
+        public const int MaxCharactersPerCurrencyCode = 6;
+
+        /// <summary>
+        /// Maximum chars currency pair can contain
+        /// If you modify this, you must modify const with same name in ForexTests.cs!
+        /// </summary>
+        public const int MaxCharactersPerCurrencyPair = 2*MaxCharactersPerCurrencyCode;
+
+
+        /// <summary>
         /// Gets the listing of crypto pairs used for currency conversion rates
         /// </summary>
         /// <remarks>
         /// It must include all currency pairs needed to resolve quote currencies in <see cref="Cash.EnsureCurrencyDataFeed"/>
         /// </remarks>
-        public static readonly IReadOnlyList<string> CryptoCurrencyPairs = new List<string>
+        public static readonly IReadOnlyList<string> CryptoCurrencyPairs = new List<string>() 
         {
+
             "BTCUSD",
             "BCHUSD",
             "LTCUSD",
@@ -38,7 +53,30 @@ namespace QuantConnect
             "BTCEUR",
             "BCHEUR",
             "LTCEUR",
-            "ETHEUR"
+            "ETHEUR",
+            "EOSETH",
+            "EOSEUR",
+            "EOSUSD",
+            "EOSBTC",
+            "ICNETH",
+            "ICNBTC",
+            "USDTUSD",
+            "ZRXBTC",
+            "ZRXETH",
+            "WANBTC",
+            "WANETH",
+            "RHOCBTC",
+            "RHOCETH",
+            "REQBTC",
+            "REQETH",
+            "RENBTC",
+            "RENETH",
+            "SENTBTC",
+            "SENTETH",
+            "TRXBTC",
+            "TRXETH",
+            "OMGBTC",
+            "OMGETH",
         };
 
         /// <summary>
@@ -254,45 +292,62 @@ namespace QuantConnect
         };
 
         /// <summary>
-        /// A mapping of currency codes to their display symbols
+        /// A mapping of currency codes to their display symbols.
         /// </summary>
         /// <remarks>
         /// Now used by Forex and CFD, should probably be moved out into its own class
         /// </remarks>
         public static readonly IReadOnlyDictionary<string, string> CurrencySymbols = new Dictionary<string, string>
         {
-            {"USD", "$"},
-            {"GBP", "₤"},
-            {"JPY", "¥"},
-            {"EUR", "€"},
-            {"NZD", "$"},
-            {"AUD", "$"},
-            {"CAD", "$"},
-            {"CHF", "Fr"},
-            {"HKD", "$"},
-            {"SGD", "$"},
-            {"XAG", "Ag"},
-            {"XAU", "Au"},
-            {"CNH", "¥"},
-            {"CNY", "¥"},
-            {"CZK", "Kč"},
-            {"DKK", "kr"},
-            {"HUF", "Ft"},
-            {"INR", "₹"},
-            {"MXN", "$"},
-            {"NOK", "kr"},
-            {"PLN", "zł"},
-            {"SAR", "﷼"},
-            {"SEK", "kr"},
-            {"THB", "฿"},
-            {"TRY", "₺"},
-            {"TWD", "NT$"},
-            {"ZAR", "R"},
 
-            {"BTC", "฿"},
-            {"BCH", "฿"},
-            {"LTC", "Ł"},
-            {"ETH", "Ξ"}
+            {"USD", "$"  },
+            {"GBP", "₤"  },
+            {"JPY", "¥"  },
+            {"EUR", "€"  },
+            {"NZD", "$"  },
+            {"AUD", "$"  },
+            {"CAD", "$"  },
+            {"CHF", "Fr" },
+            {"HKD", "$"  },
+            {"SGD", "$"  },
+            {"XAG", "Ag" },
+            {"XAU", "Au" },
+            {"CNH", "¥"  },
+            {"CNY", "¥"  },
+            {"CZK", "Kč" },
+            {"DKK", "kr" },
+            {"HUF", "Ft" },
+            {"INR", "₹"  },
+            {"MXN", "$"  },
+            {"NOK", "kr" },
+            {"PLN", "zł" },
+            {"SAR", "﷼"  },
+            {"SEK", "kr" },
+            {"THB", "฿"  },
+            {"TRY", "₺"  },
+            {"TWD", "NT$"},
+            {"ZAR", "R"  },
+            
+            // crypto display symbols
+            // lots of those display symbols are un-official and may be replaced in future
+            {"BTC",  "฿"  },
+            {"BCH",  "฿"  },
+            {"LTC",  "Ł"  },
+            {"ETH",  "Ξ"  }, 
+            {"EOS",  "Ȅ"  },
+            {"DASH", "Đ"  },
+            {"ICN",  "i"  },
+            {"USDT", "₸"  },
+            {"ZRX",  "0x" },
+            {"REQ",  "Հ"  },
+            {"OMG",  "Ꝺ"  },
+
+            {"REN",  "░▓" },
+            {"TRX",  "▶"  },
+            {"SENT", "⌂"  },
+            {"WAN",  "Ẅ"  },
+            {"RHOC", "₪"  },
+
         };
 
         /// <summary>
