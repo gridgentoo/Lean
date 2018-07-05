@@ -15,6 +15,7 @@
 
 using System.Collections.Generic;
 using QuantConnect.Securities;
+using QuantConnect.Securities.CurrencyConversion;
 
 namespace QuantConnect
 {
@@ -36,16 +37,14 @@ namespace QuantConnect
         /// </summary>
         public const int MaxCharactersPerCurrencyPair = 2*MaxCharactersPerCurrencyCode;
 
-
         /// <summary>
         /// Gets the listing of crypto pairs used for currency conversion rates
         /// </summary>
         /// <remarks>
         /// It must include all currency pairs needed to resolve quote currencies in <see cref="Cash.EnsureCurrencyDataFeed"/>
         /// </remarks>
-        public static readonly IReadOnlyList<string> CryptoCurrencyPairs = new List<string>() 
+        public static readonly IReadOnlyList<string> CryptoCurrencyPairs = new List<string>()
         {
-
             "BTCUSD",
             "BCHUSD",
             "LTCUSD",
@@ -118,7 +117,6 @@ namespace QuantConnect
             "USDJPY",
             "USDHKD",
             "USDSGD",
-
 
             "AUDCAD",
             "AUDCHF",
@@ -299,7 +297,6 @@ namespace QuantConnect
         /// </remarks>
         public static readonly IReadOnlyDictionary<string, string> CurrencySymbols = new Dictionary<string, string>
         {
-
             {"USD", "$"  },
             {"GBP", "₤"  },
             {"JPY", "¥"  },
@@ -327,13 +324,13 @@ namespace QuantConnect
             {"TRY", "₺"  },
             {"TWD", "NT$"},
             {"ZAR", "R"  },
-            
+
             // crypto display symbols
             // lots of those display symbols are un-official and may be replaced in future
             {"BTC",  "฿"  },
             {"BCH",  "฿"  },
             {"LTC",  "Ł"  },
-            {"ETH",  "Ξ"  }, 
+            {"ETH",  "Ξ"  },
             {"EOS",  "Ȅ"  },
             {"DASH", "Đ"  },
             {"ICN",  "i"  },
@@ -360,5 +357,6 @@ namespace QuantConnect
             string currencySymbol;
             return CurrencySymbols.TryGetValue(currency, out currencySymbol) ? currencySymbol : "$";
         }
+
     }
 }
