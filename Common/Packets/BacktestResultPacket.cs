@@ -162,37 +162,6 @@ namespace QuantConnect.Packets
             }
         }
 
-
-        /// <summary>
-        /// Compose result data packet - with tradable dates from the backtest job task and the partial result packet.
-        /// </summary>
-        /// <param name="job">Job that started this request</param>
-        /// <param name="results">Results class for the Backtest job</param>
-        /// <param name="progress">Progress of the packet. For the packet we assume progess of 100%.</param>
-        public BacktestResultPacket(BacktestNodePacket job, BacktestResult results, decimal progress = 1m)
-            : base(PacketType.BacktestResult)
-        {
-            try
-            {
-                Progress = Math.Round(progress, 3);
-                SessionId = job.SessionId;
-                PeriodFinish = job.PeriodFinish;
-                PeriodStart = job.PeriodStart;
-                CompileId = job.CompileId;
-                Channel = job.Channel;
-                BacktestId = job.BacktestId;
-                Results = results;
-                Name = job.Name;
-                UserId = job.UserId;
-                ProjectId = job.ProjectId;
-                SessionId = job.SessionId;
-                TradeableDates = job.TradeableDates;
-            }
-            catch (Exception err) {
-                Log.Error(err);
-            }
-        }
-
     } // End Queue Packet:
 
 

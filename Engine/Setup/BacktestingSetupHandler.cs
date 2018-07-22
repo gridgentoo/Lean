@@ -170,13 +170,6 @@ namespace QuantConnect.Lean.Engine.Setup
 
             algorithm.Name = job.GetAlgorithmName();
 
-            //Make sure the algorithm start date ok.
-            if (job.PeriodStart == default(DateTime))
-            {
-                Errors.Add(new AlgorithmSetupException("Algorithm start date was never set"));
-                return false;
-            }
-
             var controls = job.Controls;
             var isolator = new Isolator();
             var initializeComplete = isolator.ExecuteWithTimeLimit(TimeSpan.FromMinutes(5), () =>
@@ -216,9 +209,13 @@ namespace QuantConnect.Lean.Engine.Setup
             //Before continuing, detect if this is ready:
             if (!initializeComplete) return false;
 
-            // TODO: Refactor the BacktestResultHandler to use algorithm not job to set times
-            job.PeriodStart = algorithm.StartDate;
-            job.PeriodFinish = algorithm.EndDate;
+            //Make sure the algorithm start date ok.
+            if (job.PeriodStart != default(DateTime))
+            {
+                var qcAlgorithm = (QCAlgorithm) algorithm;
+                qcAlgorithm.SetStartDate(job.PeriodStart);
+                qcAlgorithm.SetEndDate(job.PeriodFinish);
+            }
 
             //Calculate the max runtime for the strategy
             _maxRuntime = GetMaximumRuntime(job.PeriodStart, job.PeriodFinish, algorithm.SubscriptionManager, algorithm.UniverseManager, baseJob.Controls);
