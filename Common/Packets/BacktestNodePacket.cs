@@ -1,11 +1,11 @@
 ﻿/*
  * QUANTCONNECT.COM - Democratizing Finance, Empowering Individuals.
  * Lean Algorithmic Trading Engine v2.0. Copyright 2014 QuantConnect Corporation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,19 +40,19 @@ namespace QuantConnect.Packets
         /// Backtest start-date as defined in the Initialize() method.
         /// </summary>
         [JsonProperty(PropertyName = "dtPeriodStart")]
-        public DateTime PeriodStart = DateTime.Now;
+        public DateTime PeriodStart;
 
         /// <summary>
         /// Backtest end date as defined in the Initialize() method.
         /// </summary>
         [JsonProperty(PropertyName = "dtPeriodFinish")]
-        public DateTime PeriodFinish = DateTime.Now;
+        public DateTime PeriodFinish;
 
         /// <summary>
         /// Estimated number of trading days in this backtest task based on the start-end dates.
         /// </summary>
         [JsonProperty(PropertyName = "iTradeableDates")]
-        public int TradeableDates = 0;
+        public int TradeableDates;
 
         /// <summary>
         /// Series or parallel runmode for the backtest
@@ -65,7 +65,7 @@ namespace QuantConnect.Packets
         /// <summary>
         /// Default constructor for JSON
         /// </summary>
-        public BacktestNodePacket() 
+        public BacktestNodePacket()
             : base(PacketType.BacktestNode)
         {
             Controls = new Controls
@@ -79,7 +79,7 @@ namespace QuantConnect.Packets
         /// <summary>
         /// Initialize the backtest task packet.
         /// </summary>
-        public BacktestNodePacket(int userId, int projectId, string sessionId, byte[] algorithmData, decimal startingCapital, string name, UserPlan userPlan = UserPlan.Free) 
+        public BacktestNodePacket(int userId, int projectId, string sessionId, byte[] algorithmData, decimal startingCapital, string name, UserPlan userPlan = UserPlan.Free)
             : base (PacketType.BacktestNode)
         {
             UserId = userId;

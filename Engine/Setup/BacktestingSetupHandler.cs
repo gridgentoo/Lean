@@ -218,7 +218,7 @@ namespace QuantConnect.Lean.Engine.Setup
             }
 
             //Calculate the max runtime for the strategy
-            _maxRuntime = GetMaximumRuntime(job.PeriodStart, job.PeriodFinish, algorithm.SubscriptionManager, algorithm.UniverseManager, baseJob.Controls);
+            _maxRuntime = GetMaximumRuntime(algorithm.StartDate, algorithm.EndDate, algorithm.SubscriptionManager, algorithm.UniverseManager, baseJob.Controls);
 
             // Python takes forever; lets give it 10x longer to finish.
             if (job.Language == Language.Python)
