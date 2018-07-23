@@ -62,13 +62,13 @@ namespace QuantConnect.Packets
         /// Start of the backtest period as defined in Initialize() method.
         /// </summary>
         [JsonProperty(PropertyName = "dtPeriodStart")]
-        public DateTime PeriodStart = DateTime.Now;
+        public DateTime PeriodStart;
 
         /// <summary>
         /// End of the backtest period as defined in the Initialize() method.
         /// </summary>
         [JsonProperty(PropertyName = "dtPeriodFinish")]
-        public DateTime PeriodFinish = DateTime.Now;
+        public DateTime PeriodFinish;
 
         /// <summary>
         /// DateTime (EST) the user requested this backtest.
@@ -80,7 +80,7 @@ namespace QuantConnect.Packets
         /// DateTime (EST) when the backtest was completed.
         /// </summary>
         [JsonProperty(PropertyName = "dtDateFinished")]
-        public DateTime DateFinished = DateTime.Now;
+        public DateTime DateFinished;
 
         /// <summary>
         /// Progress of the backtest as a percentage from 0-1 based on the days lapsed from start-finish.

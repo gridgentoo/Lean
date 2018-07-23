@@ -158,6 +158,7 @@ namespace QuantConnect.Lean.Engine
 
                     // set this again now that we've actually added securities
                     _algorithmHandlers.Results.SetAlgorithm(algorithm);
+
                     // alpha handler needs start/end dates to determine sample step sizes
                     _algorithmHandlers.Alphas.OnAfterAlgorithmInitialized(algorithm);
 

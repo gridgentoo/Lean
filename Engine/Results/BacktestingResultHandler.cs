@@ -161,6 +161,8 @@ namespace QuantConnect.Lean.Engine.Results
             if (backtestJob == null) throw new Exception("BacktestingResultHandler.Constructor(): Submitted Job type invalid.");
             _compileId = job.CompileId;
             _backtestId = backtestJob.BacktestId;
+
+            // Setting here for completeness but the algorithm isn't initialized yet so they're defaults.
             _backtestStart = backtestJob.PeriodStart;
             _backtestEnd = backtestJob.PeriodFinish;
             _tradeableDates = backtestJob.TradeableDates;
@@ -439,19 +441,19 @@ namespace QuantConnect.Lean.Engine.Results
         public void SetAlgorithm(IAlgorithm algorithm)
         {
             Algorithm = algorithm;
-            var start = Algorithm.StartDate;
-            var end = Algorithm.EndDate;
+            _backtestStart = Algorithm.StartDate;
+            _backtestEnd = Algorithm.EndDate;
 
             //Get the resample period:
-            var totalMinutes = (end - start).TotalMinutes;
+            var totalMinutes = (_backtestEnd - _backtestStart).TotalMinutes;
             var resampleMinutes = (totalMinutes < (_minimumSamplePeriod * _samples)) ? _minimumSamplePeriod : (totalMinutes / _samples); // Space out the sampling every
             ResamplePeriod = TimeSpan.FromMinutes(resampleMinutes);
             Log.Trace("BacktestingResultHandler(): Sample Period Set: " + resampleMinutes.ToString("00.00"));
 
             //Setup the sampling periods:
             _jobDays = Algorithm.Securities.Count > 0
-                ? Time.TradeableDates(Algorithm.Securities.Values, start, end)
-                : Convert.ToInt32((end.Date - start.Date).TotalDays) + 1;
+                ? Time.TradeableDates(Algorithm.Securities.Values, _backtestStart, _backtestEnd)
+                : Convert.ToInt32((_backtestEnd.Date - _backtestStart.Date).TotalDays) + 1;
 
             //Set the security / market types.
             var types = new List<SecurityType>();
