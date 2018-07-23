@@ -1236,30 +1236,20 @@ namespace QuantConnect.Algorithm
             //Round down
             start = start.RoundDown(TimeSpan.FromDays(1));
 
-            //Validate the start date:
-            //1. Check range;
+            //Validate the start date
             if (start < (new DateTime(1900, 01, 01)))
             {
                 throw new Exception("Please select a start date after January 1st, 1900.");
             }
 
-            //2. Check future date
+            // Check future date
             var todayInAlgorithmTimeZone = DateTime.UtcNow.ConvertFromUtc(TimeZone).Date;
             if (start > todayInAlgorithmTimeZone)
             {
-                throw new Exception("Please select start date less than today");
+                throw new Exception("Please select start date less than today.");
             }
 
-            //3. Check end date greater:
-            if (_endDate != new DateTime())
-            {
-                if (start > _endDate)
-                {
-                    throw new Exception("Please select start date less than end date.");
-                }
-            }
-
-            //4. Check not locked already:
+            // Check not locked already
             if (!_locked)
             {
                 // this is only or backtesting
@@ -1286,26 +1276,15 @@ namespace QuantConnect.Algorithm
             // no need to set this value in live mode, will be set using the current time.
             if (_liveMode) return;
 
-            //Validate:
-            //1. Check Range:
             if (end > DateTime.Now.Date.AddDays(-1))
             {
                 end = DateTime.Now.Date.AddDays(-1);
             }
 
-            //2. Check start date less:
-            if (_startDate != new DateTime())
-            {
-                if (end < _startDate)
-                {
-                    throw new Exception("Please select end date greater than start date.");
-                }
-            }
-
-            //3. Make this at the very end of the requested date
+            // Make this at the very end of the requested date
             end = end.RoundDown(TimeSpan.FromDays(1)).AddDays(1).AddTicks(-1);
 
-            //4. Check not locked already:
+            // Check not locked already
             if (!_locked)
             {
                 _endDate = end;

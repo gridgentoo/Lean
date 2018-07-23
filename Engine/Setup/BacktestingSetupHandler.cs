@@ -217,6 +217,11 @@ namespace QuantConnect.Lean.Engine.Setup
                 qcAlgorithm.SetEndDate(job.PeriodFinish);
             }
 
+            if (algorithm.StartDate > algorithm.EndDate)
+            {
+                Errors.Add(new AlgorithmSetupException($"Please set backtest range start date ({algorithm.StartDate}) to less than your end date ({algorithm.EndDate})."));
+            }
+
             //Calculate the max runtime for the strategy
             _maxRuntime = GetMaximumRuntime(algorithm.StartDate, algorithm.EndDate, algorithm.SubscriptionManager, algorithm.UniverseManager, baseJob.Controls);
 
@@ -244,11 +249,11 @@ namespace QuantConnect.Lean.Engine.Setup
             algorithm.SetMaximumOrders(_maxOrders);
 
             //Starting date of the algorithm:
-            _startingDate = job.PeriodStart;
+            _startingDate = algorithm.StartDate;
 
             //Put into log for debugging:
             Log.Trace("SetUp Backtesting: User: " + job.UserId + " ProjectId: " + job.ProjectId + " AlgoId: " + job.AlgorithmId);
-            Log.Trace("Dates: Start: " + job.PeriodStart.ToShortDateString() + " End: " + job.PeriodFinish.ToShortDateString() + " Cash: " + _startingCaptial.ToString("C"));
+            Log.Trace("Dates: Start: " + algorithm.StartDate.ToShortDateString() + " End: " + algorithm.EndDate.ToShortDateString() + " Cash: " + _startingCaptial.ToString("C"));
 
             if (Errors.Count > 0)
             {
