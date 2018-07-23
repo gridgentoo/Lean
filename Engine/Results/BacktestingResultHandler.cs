@@ -844,7 +844,7 @@ namespace QuantConnect.Lean.Engine.Results
                 BacktestId = _backtestId,
                 Channel = _channel,
                 CompileId = _compileId,
-                Progress = Convert.ToDecimal(Math.Round(progress)),
+                Progress = Convert.ToDecimal(Math.Round(progress, 3)),
                 PeriodFinish = _backtestEnd,
                 PeriodStart = _backtestStart,
                 Results = result,
