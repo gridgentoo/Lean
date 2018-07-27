@@ -207,48 +207,38 @@ namespace QuantConnect.Securities
             }
 
             // continue iterating while we do not have enough cash for the order
-            decimal cashRequired;
-            decimal orderValue;
-            decimal orderFees;
-            var feeToPriceRatio = 0m;
+            decimal cashRequired = 0;
+            decimal orderFees = 0;
 
             // compute the initial order quantity
-            var orderQuantity = targetOrderValue / unitPrice;
-
-            // rounding off Order Quantity to the nearest multiple of Lot Size
-            orderQuantity -= orderQuantity % security.SymbolProperties.LotSize;
-            if (orderQuantity == 0)
-            {
-                return new GetMaximumOrderQuantityForTargetValueResult(0, $"The order quantity is less than the lot size of {security.SymbolProperties.LotSize} and has been rounded to zero.", false);
-            }
+            var orderQuantity = (cashRemaining < targetOrderValue ? cashRemaining : targetOrderValue) / unitPrice;
 
             do
             {
-                // reduce order quantity by feeToPriceRatio, since it is faster than by lot size
-                // if it becomes nonpositive, return zero
-                orderQuantity -= feeToPriceRatio;
+                if (cashRequired + orderFees > targetOrderValue)
+                {
+                    var targetOrderValuePerOrder = (cashRequired + orderFees) / orderQuantity;
+                    var amountOfOrdersToRemove = (cashRequired + orderFees - targetOrderValue) / targetOrderValuePerOrder;
+                    orderQuantity -= amountOfOrdersToRemove;
+                }
+                else if (cashRequired > cashRemaining) // this shouldn't be true, but just in case
+                {
+                    var amountOfOrdersToRemove = (cashRequired - cashRemaining) / unitPrice;
+                    orderQuantity -= amountOfOrdersToRemove;
+                }
+
+                // rounding off Order Quantity to the nearest multiple of Lot Size
+                orderQuantity -= orderQuantity % security.SymbolProperties.LotSize;
                 if (orderQuantity <= 0)
                 {
-                    return new GetMaximumOrderQuantityForTargetValueResult(0, $"The portfolio does not hold enough {currency} including the order fees.");
+                    return new GetMaximumOrderQuantityForTargetValueResult(0, $"The order quantity is less than the lot size of {security.SymbolProperties.LotSize} and has been rounded to zero.", false);
                 }
 
                 // generate the order
                 var order = new MarketOrder(security.Symbol, orderQuantity, DateTime.UtcNow);
-                orderValue = orderQuantity * unitPrice;
+                cashRequired = orderQuantity * unitPrice;
                 orderFees = security.FeeModel.GetOrderFee(security, order);
-
-                // find an incremental delta value for the next iteration step
-                feeToPriceRatio = orderFees / unitPrice;
-                feeToPriceRatio -= feeToPriceRatio % security.SymbolProperties.LotSize;
-                if (feeToPriceRatio < security.SymbolProperties.LotSize)
-                {
-                    feeToPriceRatio = security.SymbolProperties.LotSize;
-                }
-
-                // calculate the cash required for the order
-                cashRequired = orderValue;
-
-            } while (cashRequired > cashRemaining || orderValue + orderFees > targetOrderValue);
+            } while (cashRequired > cashRemaining || cashRequired + orderFees > targetOrderValue);
 
             // add directionality back in
             return new GetMaximumOrderQuantityForTargetValueResult((direction == OrderDirection.Sell ? -1 : 1) * orderQuantity);
