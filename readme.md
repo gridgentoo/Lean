@@ -3,7 +3,7 @@
 # Архитектура [Lean] algorithmic trading engine & автоматизации торговли на бирже
 https://drive.google.com/drive/folders/1aFGbbeDtwOMK2snN_ok24I33_VmQlw5p
 
-Индикатор каанала регрессии RegressionChannelAlgorithm.cs
+Индикатор канала регрессии RegressionChannelAlgorithm.cs
 https://github.com/gridgentoo/Lean/blob/master/Algorithm.CSharp/RegressionChannelAlgorithm.cs
 
 Индикатор пересечение Машек EMA  EmaCrossUniverseSelectionAlgorithm.cs
