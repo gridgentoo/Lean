@@ -1,3 +1,11 @@
+
+
+Канал регрессии RegressionChannelAlgorithm.cs
+https://github.com/gridgentoo/Lean/blob/master/Algorithm.CSharp/RegressionChannelAlgorithm.cs
+
+Пересечение Машек EMA  EmaCrossUniverseSelectionAlgorithm.cs
+https://github.com/gridgentoo/Lean/blob/master/Algorithm.CSharp/EmaCrossUniverseSelectionAlgorithm.cs
+
 ![alt tag](https://cdn.quantconnect.com/web/i/20180601-1615-lean-logo-small.png)
 =========
 
