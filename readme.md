@@ -1,27 +1,35 @@
 ![alt tag](https://cdn.quantconnect.com/web/i/20180601-1615-lean-logo-small.png)
 
 # Архитектура [Lean] algorithmic trading engine & автоматизации торговли на бирже
+
 https://drive.google.com/drive/folders/1aFGbbeDtwOMK2snN_ok24I33_VmQlw5p
 
 Индикатор канала регрессии RegressionChannelAlgorithm.cs
+
 https://github.com/gridgentoo/Lean/blob/master/Algorithm.CSharp/RegressionChannelAlgorithm.cs
 
 Индикатор пересечение Машек EMA  EmaCrossUniverseSelectionAlgorithm.cs
+
 https://github.com/gridgentoo/Lean/blob/master/Algorithm.CSharp/EmaCrossUniverseSelectionAlgorithm.cs
 
 Индикатор MACD MACDTrendAlgorithm.cs
+
 https://github.com/gridgentoo/Lean/blob/master/Algorithm.CSharp/MACDTrendAlgorithm.cs
 
 Step by Step Algorithmic Trading Guide with QuantConnect
+
 https://www.youtube.com/watch?v=9wm8e7w6qN4
 
 Lean Engine: Lesson 1 - Using a Desktop User Interface
+
 https://www.youtube.com/watch?time_continue=2&v=m6llfznP4d4
 
 Lean Engine: Lesson 2 - How do I use the QuantConnect API File Provider?
+
 https://www.youtube.com/watch?v=uyHp_jyeSpA
 
 # Архитектура [Voltdb]  хранение данных в памяти с концепцией распределенной 
+
 https://drive.google.com/drive/folders/1YqYZIwWFvy1lP1NMOxrhZrMX7xZj-628
 
 СУБД VoltDB 3.0, развиваемой под руководством Майкла Стоунбрейкера (Mike Stonebraker), одного из основателей проектов Ingres и PostgreSQL. СУБД VoltDB поддерживает горизонтальное масштабирование и ориентирована на обработку транзакций в реальном времени (OLTP). На недорогом кластере, собранном своими силами из обычных серверов, СУБД способна обрабатывать миллионы транзакций в секунду.
