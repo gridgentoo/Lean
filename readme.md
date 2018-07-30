@@ -88,10 +88,12 @@ Mahout позволяет приложениям быстро и эффекти�
 Включает матричные и векторные библиотеки.
 
 # Клиенты
+
 Mahout используют такие компании, как Adobe, Facebook, LinkedIn, Foursquare, Twitter и Yahoo.
 Foursquare использует механизм рекомендаций Mahout для определения адресов.
 Twitter использует Mahout для моделирования интересов пользователей.
 Yahoo! использует Mahout для разработки шаблонов.
+
 =========
 
 [![Build Status](https://travis-ci.org/QuantConnect/Lean.svg?branch=feature%2Fremove-web-socket-4-net)](https://travis-ci.org/QuantConnect/Lean) &nbsp;&nbsp;&nbsp; [![Google Group](https://img.shields.io/badge/debug-Google%20Group-53c82b.svg)](https://groups.google.com/forum/#!forum/lean-engine) &nbsp;&nbsp;&nbsp; [![Slack Chat](https://img.shields.io/badge/chat-Slack-53c82b.svg)](https://www.quantconnect.com/slack)
@@ -101,7 +103,7 @@ Yahoo! использует Mahout для разработки шаблонов.
 
 ----------
 
-## Introduction ##
+## Introduction Lean Engine  ##
 
 Lean Engine is an open-source algorithmic trading engine built for easy strategy research, backtesting and live trading. We integrate with common data providers and brokerages so you can quickly deploy algorithmic trading strategies.
 
