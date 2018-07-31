@@ -32,7 +32,6 @@ Quick Start Lesson 5: Triggering Scheduled Events
 
 https://www.youtube.com/watch?v=SUu4MKlm93I&index=6&list=PLD7-B3LE6mz7cqCrLa3Sy8I8Gb62CJwX9&t=0s
 
-
 # Архитектура [Voltdb]  хранение данных в памяти с концепцией распределенной 
 
 https://drive.google.com/drive/folders/1YqYZIwWFvy1lP1NMOxrhZrMX7xZj-628
